@@ -1,6 +1,6 @@
 package com.example.marvelapplication.vm.characters.usecase
 
-import com.example.marvelapplication.data.characters.CharacterDataWrapper
+import com.example.marvelapplication.data.characters.models.CharacterDataWrapper
 
 sealed class CharactersResult {
     class Error(val msg: String) : CharactersResult()

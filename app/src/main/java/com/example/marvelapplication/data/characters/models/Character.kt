@@ -1,25 +1,30 @@
-package com.example.marvelapplication.data.characters
+package com.example.marvelapplication.data.characters.models
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.bumptech.glide.Glide
 import com.example.marvelapplication.R
 import java.io.Serializable
 import java.util.Date
-import kotlin.collections.ArrayList
 
+@Entity(tableName = "Characters")
 class Character(
+    @PrimaryKey
     val id: Int,
     val name: String,
     val description: String,
     val modified: Date,
     val resourceURI: String,
-    val urls: ArrayList<Url>,
+    // val urls: ArrayList<Url>,
+    @Embedded
     val thumbnail: Image,
-    val comics: ComicList,
-    val stories: StoryList,
-    val events: EventList,
-    val series: SeriesList
+    // val comics: ComicList,
+    // val stories: StoryList,
+    // val events: EventList,
+    // val series: SeriesList
 ) : Serializable {
 
     fun imageUrl(): String {

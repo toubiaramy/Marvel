@@ -2,7 +2,6 @@ package com.example.marvelapplication.ui.characters
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +12,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvelapplication.R
-import com.example.marvelapplication.data.characters.Character
+import com.example.marvelapplication.data.characters.models.Character
 import com.example.marvelapplication.databinding.FragmentCharactersListBinding
 import com.example.marvelapplication.vm.characters.CharactersViewModel
 import com.example.marvelapplication.vm.characters.usecase.CharactersResult
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,11 +49,6 @@ class CharactersListFragment : Fragment() {
 
         mCharactersViewModel.liveCharacters.observe(viewLifecycleOwner) {
             when (it) {
-                is CharactersResult.Success -> {
-                    binding.refresh.isRefreshing = false
-                    Log.d("TEST: ", Gson().toJson(it.data.data.results))
-                    adapter.setData(it.data.data.results)
-                }
                 is CharactersResult.Error -> {
                     binding.refresh.isRefreshing = false
                     Toast.makeText(requireContext(), it.msg, Toast.LENGTH_LONG).show()
@@ -75,6 +68,10 @@ class CharactersListFragment : Fragment() {
                     binding.refresh.isRefreshing = false
                 }
             }
+        }
+
+        mCharactersViewModel.localData.observe(viewLifecycleOwner) {
+            adapter.setData(it)
         }
 
         return root
@@ -105,7 +102,7 @@ class CharactersListFragment : Fragment() {
     fun onItemDeleted(char: Character, position: Int) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-            // mUserViewModel.deleteUser(user)
+            mCharactersViewModel.deleteCharacter(char)
             adapter.notifyItemChanged(position)
             Toast.makeText(
                 requireContext(),

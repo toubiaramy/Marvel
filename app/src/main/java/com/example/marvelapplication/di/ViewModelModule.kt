@@ -1,5 +1,8 @@
 package com.example.marvelapplication.di
 
+import com.example.marvelapplication.data.characters.repository.CharacterRepository
+import com.example.marvelapplication.data.characters.repository.CharacterRepositoryImpl
+import com.example.marvelapplication.data.characters.repository.CharactersDao
 import com.example.marvelapplication.retrofit.Api
 import com.example.marvelapplication.vm.characters.usecase.CharacterUseCase
 import com.example.marvelapplication.vm.characters.usecase.CharacterUseCaseImpl
@@ -17,13 +20,19 @@ object ViewModelModule {
 
     @Provides
     @ViewModelScoped
-    fun provideCharacterUseCase(api: Api): CharacterUseCase {
-        return CharacterUseCaseImpl(api)
+    fun provideCharacterUseCase(api: Api, repository: CharacterRepository): CharacterUseCase {
+        return CharacterUseCaseImpl(api, repository)
     }
 
     @Provides
     @ViewModelScoped
     fun provideCoroutineDispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideCharactersRepository(dao: CharactersDao): CharacterRepository {
+        return CharacterRepositoryImpl(dao)
     }
 }

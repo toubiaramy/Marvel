@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.marvelapplication.data.characters.Character
+import com.example.marvelapplication.data.characters.models.Character
 import com.example.marvelapplication.databinding.SingleRowCharacterBinding
 
 class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharactersViewHolder>() {

@@ -6,7 +6,7 @@
 
         <variable
             name="character"
-            type="com.example.marvelapplication.data.characters.Character" />
+            type="com.example.marvelapplication.data.characters.models.Character" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
