@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MarvelApplication</string>
+    <string name="no_data_received">No data received</string>
 </resources>
