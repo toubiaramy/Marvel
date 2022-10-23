@@ -16,7 +16,7 @@ interface CharactersDao {
     fun updateCharacter(character: Character)
 
     @Query("SELECT * FROM Characters ORDER BY modified DESC")
-    fun readAllData(): LiveData<List<Character>>
+    fun getAllCharacters(): LiveData<List<Character>>
 
     @Delete
     fun deleteCharacter(character: Character)

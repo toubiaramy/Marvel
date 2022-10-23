@@ -17,5 +17,5 @@ class CharacterRepositoryImpl @Inject constructor(
     }
 
     override val readDataFromLocalStorage: LiveData<List<Character>> =
-        charactersDao.readAllData()
+        charactersDao.getAllCharacters()
 }

@@ -27,14 +27,14 @@ class CharacterDetailsUseCaseImpl @Inject constructor(
     private val api: Api
 ) : CharacterDetailsUseCase {
     private val logTag: String? = CharacterDetailsUseCaseImpl::class.simpleName
-
+    private val limit = 3
     override fun getCharacterDetailsFromServer(characterId: String): Flow<CharacterDetailsResult> {
         return flow {
 
             emit(CharacterDetailsResult.Loading)
             try {
                 Log.d(logTag, "comicCall called")
-                val comicCall = api.getComics(characterId, 3).execute()
+                val comicCall = api.getComics(characterId, limit).execute()
                 if (comicCall.isSuccessful) {
                     Log.d(logTag, "comicCall success")
                     val data = comicCall.body()!!.data.results
@@ -56,7 +56,7 @@ class CharacterDetailsUseCaseImpl @Inject constructor(
             emit(CharacterDetailsResult.Loading)
             try {
                 Log.d(logTag, "eventCall called")
-                val eventCall = api.getEvents(characterId, 3).execute()
+                val eventCall = api.getEvents(characterId, limit).execute()
                 if (eventCall.isSuccessful) {
                     Log.d(logTag, "eventCall success")
                     val data = eventCall.body()!!.data.results
@@ -78,7 +78,7 @@ class CharacterDetailsUseCaseImpl @Inject constructor(
             emit(CharacterDetailsResult.Loading)
             try {
                 Log.d(logTag, "storyCall called")
-                val storyCall = api.getStories(characterId, 3).execute()
+                val storyCall = api.getStories(characterId, limit).execute()
                 if (storyCall.isSuccessful) {
                     Log.d(logTag, "storyCall success")
                     val data = storyCall.body()!!.data.results
@@ -100,7 +100,7 @@ class CharacterDetailsUseCaseImpl @Inject constructor(
             emit(CharacterDetailsResult.Loading)
             try {
                 Log.d(logTag, "seriesCall called")
-                val seriesCall = api.getSeries(characterId, 3).execute()
+                val seriesCall = api.getSeries(characterId, limit).execute()
                 if (seriesCall.isSuccessful) {
                     Log.d(logTag, "seriesCall success")
                     val data = seriesCall.body()!!.data.results
