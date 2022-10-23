@@ -4,4 +4,5 @@
     <string name="character_image">Character image</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="swipe_down_to_refresh">Swipe down to refresh data</string>
 </resources>

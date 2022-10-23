@@ -28,98 +28,124 @@ class CharacterDetailsUseCaseImpl @Inject constructor(
 ) : CharacterDetailsUseCase {
     private val logTag: String? = CharacterDetailsUseCaseImpl::class.simpleName
     private val limit = 3
+
     override fun getCharacterDetailsFromServer(characterId: String): Flow<CharacterDetailsResult> {
         return flow {
-
             emit(CharacterDetailsResult.Loading)
-            try {
-                Log.d(logTag, "comicCall called")
-                val comicCall = api.getComics(characterId, limit).execute()
-                if (comicCall.isSuccessful) {
-                    Log.d(logTag, "comicCall success")
-                    val data = comicCall.body()!!.data.results
-                    if (data.size == 0) {
-                        Log.d(logTag, "comicCall success no data")
-                        emit(CharacterDetailsResult.NoData("No Comics received"))
-                    } else {
-                        Log.d(logTag, "comicCall success data size:" + data.size)
-                        emit(CharacterDetailsResult.Success(data))
-                    }
-                } else {
-                    Log.d(logTag, "comicCall fails")
-                    emit(CharacterDetailsResult.NoData("Call Error: No Comics received"))
-                }
-            } catch (e: Exception) {
-                emit(CharacterDetailsResult.Error("Error: Fail to retrieve comics:\n" + e.cause))
-            }
 
-            emit(CharacterDetailsResult.Loading)
-            try {
-                Log.d(logTag, "eventCall called")
-                val eventCall = api.getEvents(characterId, limit).execute()
-                if (eventCall.isSuccessful) {
-                    Log.d(logTag, "eventCall success")
-                    val data = eventCall.body()!!.data.results
-                    if (data.size == 0) {
-                        Log.d(logTag, "eventCall success no data")
-                        emit(CharacterDetailsResult.NoData("No Events received"))
-                    } else {
-                        Log.d(logTag, "eventCall success data size:" + data.size)
-                        emit(CharacterDetailsResult.Success(data))
-                    }
-                } else {
-                    Log.d(logTag, "eventCall fails")
-                    emit(CharacterDetailsResult.NoData("Call Error: No Events received"))
-                }
-            } catch (e: Exception) {
-                emit(CharacterDetailsResult.Error("Error: Fail to retrieve events:\n" + e.cause))
-            }
+            val comicsResult = getComics(characterId)
+            emit(comicsResult)
 
-            emit(CharacterDetailsResult.Loading)
-            try {
-                Log.d(logTag, "storyCall called")
-                val storyCall = api.getStories(characterId, limit).execute()
-                if (storyCall.isSuccessful) {
-                    Log.d(logTag, "storyCall success")
-                    val data = storyCall.body()!!.data.results
-                    if (data.size == 0) {
-                        Log.d(logTag, "storyCall success no data")
-                        emit(CharacterDetailsResult.NoData("No Stories received"))
-                    } else {
-                        Log.d(logTag, "storyCall success data size:" + data.size)
-                        emit(CharacterDetailsResult.Success(data))
-                    }
-                } else {
-                    Log.d(logTag, "storyCall fails")
-                    emit(CharacterDetailsResult.NoData("Call Error: No Stories received"))
-                }
-            } catch (e: Exception) {
-                emit(CharacterDetailsResult.Error("Error: Fail to retrieve stories:\n" + e.cause))
-            }
+            val eventsResult = getEvents(characterId)
+            emit(eventsResult)
 
-            emit(CharacterDetailsResult.Loading)
-            try {
-                Log.d(logTag, "seriesCall called")
-                val seriesCall = api.getSeries(characterId, limit).execute()
-                if (seriesCall.isSuccessful) {
-                    Log.d(logTag, "seriesCall success")
-                    val data = seriesCall.body()!!.data.results
-                    if (data.size == 0) {
-                        Log.d(logTag, "seriesCall success no data")
-                        emit(CharacterDetailsResult.NoData("No Series received"))
-                    } else {
-                        Log.d(logTag, "seriesCall success data size:" + data.size)
-                        emit(CharacterDetailsResult.Success(data))
-                    }
-                } else {
-                    Log.d(logTag, "seriesCall fails")
-                    emit(CharacterDetailsResult.NoData("Call Error: No Series received"))
-                }
-            } catch (e: Exception) {
-                emit(CharacterDetailsResult.Error("Error: Fail to retrieve series:\n" + e.cause))
-            }
+            val storiesResult = getStories(characterId)
+            emit(storiesResult)
+
+            val seriesResult = getSeries(characterId)
+            emit(seriesResult)
 
             emit(CharacterDetailsResult.DismissLoading)
         }.flowOn(Dispatchers.IO)
+    }
+
+    fun getComics(
+        characterId: String
+    ): CharacterDetailsResult {
+        try {
+            Log.d(logTag, "comicCall called")
+            val comicCall = api.getComics(characterId, limit).execute()
+            return if (comicCall.isSuccessful) {
+                Log.d(logTag, "comicCall success")
+                val data = comicCall.body()!!.data.results
+                if (data.size == 0) {
+                    Log.d(logTag, "comicCall success no data")
+                    CharacterDetailsResult.NoData("No Comics received")
+                } else {
+                    Log.d(logTag, "comicCall success data size:" + data.size)
+                    CharacterDetailsResult.Success(data)
+                }
+            } else {
+                Log.d(logTag, "comicCall fails")
+                CharacterDetailsResult.NoData("Call Error: No Comics received")
+            }
+        } catch (e: Exception) {
+            return CharacterDetailsResult.Error("Error: Fail to retrieve comics:\n" + e.cause)
+        }
+    }
+
+    private fun getSeries(
+        characterId: String
+    ): CharacterDetailsResult {
+        try {
+            Log.d(logTag, "seriesCall called")
+            val seriesCall = api.getSeries(characterId, limit).execute()
+            return if (seriesCall.isSuccessful) {
+                Log.d(logTag, "seriesCall success")
+                val data = seriesCall.body()!!.data.results
+                if (data.size == 0) {
+                    Log.d(logTag, "seriesCall success no data")
+                    CharacterDetailsResult.NoData("No Series received")
+                } else {
+                    Log.d(logTag, "seriesCall success data size:" + data.size)
+                    CharacterDetailsResult.Success(data)
+                }
+            } else {
+                Log.d(logTag, "seriesCall fails")
+                CharacterDetailsResult.NoData("Call Error: No Series received")
+            }
+        } catch (e: Exception) {
+            return CharacterDetailsResult.Error("Error: Fail to retrieve series:\n" + e.cause)
+        }
+    }
+
+    private fun getStories(
+        characterId: String
+    ): CharacterDetailsResult {
+        try {
+            Log.d(logTag, "storyCall called")
+            val storyCall = api.getStories(characterId, limit).execute()
+            return if (storyCall.isSuccessful) {
+                Log.d(logTag, "storyCall success")
+                val data = storyCall.body()!!.data.results
+                if (data.size == 0) {
+                    Log.d(logTag, "storyCall success no data")
+                    CharacterDetailsResult.NoData("No Stories received")
+                } else {
+                    Log.d(logTag, "storyCall success data size:" + data.size)
+                    CharacterDetailsResult.Success(data)
+                }
+            } else {
+                Log.d(logTag, "storyCall fails")
+                CharacterDetailsResult.NoData("Call Error: No Stories received")
+            }
+        } catch (e: Exception) {
+            return CharacterDetailsResult.Error("Error: Fail to retrieve stories:\n" + e.cause)
+        }
+    }
+
+    private fun getEvents(
+        characterId: String
+    ): CharacterDetailsResult {
+        try {
+            Log.d(logTag, "eventCall called")
+            val eventCall = api.getEvents(characterId, limit).execute()
+            return if (eventCall.isSuccessful) {
+                Log.d(logTag, "eventCall success")
+                val data = eventCall.body()!!.data.results
+                if (data.size == 0) {
+                    Log.d(logTag, "eventCall success no data")
+                    CharacterDetailsResult.NoData("No Events received")
+                } else {
+                    Log.d(logTag, "eventCall success data size:" + data.size)
+                    CharacterDetailsResult.Success(data)
+                }
+            } else {
+                Log.d(logTag, "eventCall fails")
+                CharacterDetailsResult.NoData("Call Error: No Events received")
+            }
+        } catch (e: Exception) {
+            return CharacterDetailsResult.Error("Error: Fail to retrieve events:\n" + e.cause)
+        }
     }
 }

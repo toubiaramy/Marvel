@@ -2,7 +2,6 @@ package com.example.marvelapplication.ui.characters
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,7 +71,10 @@ class CharactersListFragment : Fragment() {
         }
 
         mCharactersViewModel.localData.observe(viewLifecycleOwner) {
-            Log.d("TEST:", "live data called")
+            if (it.isEmpty())
+                binding.tvSwipeText.visibility = View.VISIBLE
+            else
+                binding.tvSwipeText.visibility = View.GONE
             adapter.setData(it)
         }
 

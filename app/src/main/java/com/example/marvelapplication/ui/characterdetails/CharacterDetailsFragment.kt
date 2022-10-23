@@ -48,11 +48,10 @@ class CharacterDetailsFragment : Fragment() {
                         binding.progressLoading.visibility = View.GONE
                     }
                     is CharacterDetailsResult.Error -> {
-                        binding.progressLoading.visibility = View.GONE
-                        Toast.makeText(requireContext(), it.msg, Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
                     }
                     is CharacterDetailsResult.NoData -> {
-                        Toast.makeText(requireContext(), it.msg, Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
                     }
                     is CharacterDetailsResult.Success -> {
                         adapter.updateData(it.data)
