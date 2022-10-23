@@ -1,14 +1,10 @@
 package com.example.marvelapplication.data.characters.models
 
-import android.widget.ImageView
-import androidx.databinding.BindingAdapter
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.bumptech.glide.Glide
-import com.example.marvelapplication.R
 import java.io.Serializable
-import java.util.Date
+import java.util.*
 
 @Entity(tableName = "Characters")
 class Character(
@@ -28,17 +24,6 @@ class Character(
 ) : Serializable {
 
     fun imageUrl(): String {
-        return thumbnail.path.replace("http", "https") + "." + thumbnail.extension
-    }
-
-    companion object {
-        @JvmStatic
-        @BindingAdapter("imageBinding")
-        fun loadImage(view: ImageView, url: String) {
-            Glide.with(view.context)
-                .load(url)
-                .error(R.mipmap.ic_launcher)
-                .into(view)
-        }
+        return thumbnail.path + "." + thumbnail.extension
     }
 }

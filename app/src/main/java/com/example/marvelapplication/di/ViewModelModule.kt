@@ -4,6 +4,8 @@ import com.example.marvelapplication.data.characters.repository.CharacterReposit
 import com.example.marvelapplication.data.characters.repository.CharacterRepositoryImpl
 import com.example.marvelapplication.data.characters.repository.CharactersDao
 import com.example.marvelapplication.retrofit.Api
+import com.example.marvelapplication.vm.characterdetails.usecase.CharacterDetailsUseCase
+import com.example.marvelapplication.vm.characterdetails.usecase.CharacterDetailsUseCaseImpl
 import com.example.marvelapplication.vm.characters.usecase.CharacterUseCase
 import com.example.marvelapplication.vm.characters.usecase.CharacterUseCaseImpl
 import dagger.Module
@@ -22,6 +24,12 @@ object ViewModelModule {
     @ViewModelScoped
     fun provideCharacterUseCase(api: Api, repository: CharacterRepository): CharacterUseCase {
         return CharacterUseCaseImpl(api, repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideCharacterDetailsUseCase(api: Api): CharacterDetailsUseCase {
+        return CharacterDetailsUseCaseImpl(api)
     }
 
     @Provides

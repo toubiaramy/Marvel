@@ -3,6 +3,7 @@ package com.example.marvelapplication.ui.characters
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvelapplication.data.characters.models.Character
 import com.example.marvelapplication.databinding.SingleRowCharacterBinding
@@ -30,9 +31,11 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharactersViewH
         val char = charList[position]
         holder.bind(char)
         holder.itemView.setOnClickListener {
-            /*holder.itemView.findNavController().navigate(
-                UsersListFragmentDirections.fromUserListToAddUser().setUser(user)
-            )*/
+            char.id.let {
+                holder.itemView.findNavController().navigate(
+                    CharactersListFragmentDirections.fromCharactersToDetails(char.id)
+                )
+            }
         }
     }
 
